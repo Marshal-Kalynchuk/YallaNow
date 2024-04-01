@@ -73,8 +73,8 @@ public class EventsController {
      * @param userId
      * @return Response Entity with the list of events for the participant
      */
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<?> GetEventsForParticipant(@PathVariable String userId, @RequestAttribute("Id") String attrUserId) {
+    @GetMapping("/participants/{userId}")
+    public ResponseEntity<?> getEventsForParticipant(@PathVariable String userId, @RequestAttribute("Id") String attrUserId) {
         try{
             List<Map<String, Object>> participants = participantService.getEventsForParticipant(attrUserId);
             return ResponseEntity.ok(participants);
@@ -84,7 +84,6 @@ public class EventsController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
 
     /**
      * Update an event

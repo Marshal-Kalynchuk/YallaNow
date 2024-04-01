@@ -1,6 +1,7 @@
 import axios from "axios";
 import config from "../config/config";
-import { getAuth,getIdToken  } from "firebase/auth";
+import handleResponse from "./ResponseHelper";
+import { getAuth, getIdToken  } from "firebase/auth";
 
 class GroupService {
     constructor() {
@@ -24,9 +25,12 @@ class GroupService {
                     "Authorization": idToken
             },    
             });
-            return this.handleResponse(response);
+            return handleResponse(response);
         } catch (error) {
-            throw new Error("Error communicating with server.");
+            if (error.response.status === 409) {
+                throw Error("Group with that name already exists!")
+            }
+            handleResponse(error.response);
         }
     }
 
@@ -37,11 +41,11 @@ class GroupService {
             const response = await axios.get(this.baseUrl, {
                 headers: { 
                     "Authorization": idToken
-            },    
+                },
             });
-            return this.handleResponse(response);
+            return handleResponse(response);
         } catch (error) {
-            throw new Error("Error communicating with server.");
+            handleResponse(error.response);
         }
     }
 
@@ -54,9 +58,9 @@ class GroupService {
                     "Authorization": idToken
             },    
             });
-            return this.handleResponse(response);
+            return handleResponse(response);
         } catch (error) {
-            throw new Error("Error communicating with server.");
+            handleResponse(error.response);
         }
     }
 
@@ -69,9 +73,9 @@ class GroupService {
                     "Authorization": idToken
             },    
             });
-            return this.handleResponse(response);
+            return handleResponse(response);
         } catch (error) {
-            throw new Error("Error communicating with server.");
+            handleResponse(error.response);
         }
     }
 
@@ -84,9 +88,9 @@ class GroupService {
                     "Authorization": idToken
             },    
             });
-            return this.handleResponse(response, true);
+            return handleResponse(response);
         } catch (error) {
-            throw new Error("Error communicating with server.");
+            handleResponse(error.response);
         }
     }
 
@@ -99,30 +103,14 @@ class GroupService {
                     "Authorization": idToken
             },    
             });
-            return this.handleResponse(response);
+            return handleResponse(response);
         } catch (error) {
-            throw new Error("Error communicating with server.");
+            handleResponse(error.response);
         }
     }
 
-    // Processes the server's response, parsing the response data or throwing errors
-    handleResponse(response, isStatus = false) {
-        switch (response.status) {
-            case 200:
-                return isStatus ? response.status : response.data;
-            case 400:
-                throw new Error("Bad request: " + response.data);
-            case 403:
-                throw new Error("Access denied.");
-            case 404:
-                throw new Error("Resource not found.");
-            case 422:
-                throw new Error("Maximum capacity reached.");
-            default:
-                throw new Error("Error processing request.");
-        }
-    }
 
 }
 
-export default new GroupService();
+const groupService = new GroupService()
+export default groupService;

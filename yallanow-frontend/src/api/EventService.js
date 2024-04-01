@@ -2,11 +2,15 @@ import EventServiceApi from "./EventServiceApi";
 
 class EventService {
 
+    // Retrieves a single event by its ID and formats the received data.
+    async getEvent(eventId) {
+        const rawEvent = await EventServiceApi.getEvent(eventId);
+        return this.formatEventFromEventService(rawEvent);
+    }
+
     // Creates a new event with predefined image URL, formats data for sending and receiving.
     async createEvent(eventData) {
-        eventData.eventImageUrl = "https://storage.googleapis.com/tmp-bucket-json-data/500x500.jpg"
         const requestData = this.formatEventForEventService(eventData);
-        console.log(requestData);
         const rawEvent = await EventServiceApi.createEvent(requestData);
         return this.formatEventFromEventService(rawEvent);
     }
@@ -18,10 +22,9 @@ class EventService {
         return this.formatEventFromEventService(rawEvent);
     }
 
-    // Retrieves a single event by its ID and formats the received data.
-    async getEvent(eventId) {
-        const rawEvent = await EventServiceApi.getEvent(eventId);
-        return this.formatEventFromEventService(rawEvent);
+    // Deletes an event by its ID.
+    async deleteEvent(eventId) {
+        return await EventServiceApi.deleteEvent(eventId);
     }
 
     // Fetches events for a specific group and formats each received event.
@@ -34,41 +37,10 @@ class EventService {
         }));
     }
 
-
-    // Deletes an event by its ID.
-    async deleteEvent(eventId) {
-        return await EventServiceApi.deleteEvent(eventId);
-    }
-
-    // Retrieves users who RSVP'd to a specific event.
-    async getRsvpdUsersForEvent(eventId) {
-        return await EventServiceApi.getRsvpdUsersForEvent(eventId);
-    }
-
     // Fetches events a user has RSVP'd to and formats each received event.
-    async getUserRsvpdEvents(userId) {
-        const rawEvents = await EventServiceApi.getUserRsvpdEvents(userId);
+    async getEventsForParticipant(userId) {
+        const rawEvents = await EventServiceApi.getEventsForParticipant(userId);
         return rawEvents.map(async (event) => this.formatEventFromEventService(event));
-    }
-
-    // Removes a user's RSVP from an event.
-    async unRsvpUserFromEvent(userId, eventId) {
-        return await EventServiceApi.unRsvpUserFromEvent(userId, eventId);
-    }
-
-    // Checks if a user has RSVP'd to an event.
-    async isUserRsvpdToEvent(userId, eventId) {
-        return await EventServiceApi.isUserRsvpdToEvent(userId, eventId);
-    }
-
-    // RSVPs a user to an event.
-    async rsvpUserToEvent(userId, eventId) {
-        return await EventServiceApi.rsvpUserToEvent(userId, eventId);
-    }
-
-    // Updates a user's RSVP status for an event.
-    async updateRsvpStatus(userId, eventId, status) {
-        return await EventServiceApi.updateRsvpStatus(userId, eventId, status);
     }
 
     // Formats event data before sending it to the event service.
@@ -76,12 +48,11 @@ class EventService {
 
         return {
 
-            eventID: data.eventId,
-            groupID: data.groupId,
+            eventId: data.eventId,
+            groupId: data.groupId,
             eventTitle: data.eventTitle,
             eventDescription: data.eventDescription,
             location: {
-                addressID: 1,
                 street: data.eventLocationStreet,
                 city: data.eventLocationCity,
                 province: data.eventLocationProvince,
@@ -131,4 +102,5 @@ class EventService {
 
 }
 
-export default new EventService();
+const eventService = new EventService()
+export default eventService;

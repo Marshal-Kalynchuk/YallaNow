@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import { useSearchParams } from 'react-router-dom';
 import EventCard from '../components/EventCard';
-import FeedService from '../api/FeedService';
+import feedService from '../api/FeedService';
 import { useAuth } from '../AuthContext';
 
 const SearchPage = () => {
@@ -12,15 +12,14 @@ const SearchPage = () => {
   const searchQuery = searchParams.get('query');
   const { currentUser } = useAuth();
   const userId = currentUser?.uid;
+  const searchCount = 20;
 
-  const searchEvents = async () => {
+  const searchEvents = useCallback(async () => {
     if (!searchQuery) return;
 
     setLoading(true);
     try {
-      const userId = userId; 
-      const count = 20;
-      const data = await FeedService.searchEvents(userId, count, searchQuery);
+      const data = await feedService.searchEvents(userId, searchCount, searchQuery);
       setEvents(data.recommendations ?? []);
       setRecommId(data.recommId);
     } catch (error) {
@@ -28,11 +27,12 @@ const SearchPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [userId, searchCount, searchQuery]);
 
   useEffect(() => {
     searchEvents();
-  }, [searchQuery]);
+  }, [searchEvents]);
+
 
   return (
     <div className="container mx-auto py-8">

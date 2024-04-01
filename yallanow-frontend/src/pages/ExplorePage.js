@@ -1,34 +1,32 @@
 import React, { useEffect, useState } from 'react';
 import EventCard from '../components/EventCard';
-import FeedService from '../api/FeedService';
-import {  auth } from '../config/firebase-config';
-
+import feedService from '../api/FeedService';
+import {useAuth} from "../AuthContext";
 const ExplorePage = () => {
-  console.log("Rendering ExplorePage");
-
-  const userId = 10000;
-  const initialiEventsCount = 20
+  const { currentUser } = useAuth();
+  const userId = currentUser?.uid;
+  const initialEventsCount = 20
   const [events, setEvents] = useState([]);
   const [homepageRecommId, setHomepageRecommId] = useState(null);
   const [loading, setLoading] = useState(false);
 
-
   useEffect(() => {
-    console.log("Current user: ", auth.currentUser);
-  }, []);
-  const fetchHomepageEvents = async () => {
-    setLoading(true);
-    try {
 
-      const data = await FeedService.getHomepageEvents(userId, initialiEventsCount);
-      setEvents(data.recommendations ?? []);
-      setHomepageRecommId(data.recommId);
-    } catch (error) {
-      console.error('Error fetching homepage events:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+    const fetchHomepageEvents = async () => {
+      setLoading(true);
+      try {
+        const data = await feedService.getHomepageEvents(userId, initialEventsCount);
+        setEvents(data.recommendations ?? []);
+        setHomepageRecommId(data.recommId);
+      } catch (error) {
+        console.error('Error fetching homepage events:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchHomepageEvents();
+  }, [userId, initialEventsCount]);
 
   const fetchNextEvents = async () => {
     if (!homepageRecommId || loading) return;
@@ -36,7 +34,7 @@ const ExplorePage = () => {
     try {
       console.log('Loading more events...');
       const count = 20; // Number of additional events to fetch
-      const data = await FeedService.getNextEvents(count, homepageRecommId);
+      const data = await feedService.getNextEvents(count, homepageRecommId);
       setEvents((prevEvents) => [...prevEvents, ...data.recommendations]);
       setHomepageRecommId(data.recommId);
     } catch (error) {
@@ -45,11 +43,6 @@ const ExplorePage = () => {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    fetchHomepageEvents();
-  }, []);
-
 
   return (
     <div >

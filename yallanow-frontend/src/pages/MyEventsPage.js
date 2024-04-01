@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import MyCalendar from '../components/MyCalendar';
 import EventsFeed from '../components/EventsFeed';
-import EventService from '../api/EventService';
+import eventService from '../api/EventService';
 import { useAuth } from '../AuthContext';
 
 const MyEventsPage = () => {
@@ -13,7 +13,7 @@ const MyEventsPage = () => {
     useEffect(() => {
         const fetchEvents = async () => {
             try {
-                const fetchedEvents = await EventService.getUserRsvpdEvents(currentUser);
+                const fetchedEvents = await eventService.getEventsForParticipant(userId);
                 if (fetchedEvents.length === 0) {
                     setErrorMessage('No Available Events'); 
                 } else {

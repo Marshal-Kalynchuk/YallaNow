@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import GroupCard from '../components/GroupCard';
-import GroupService from '../api/GroupService';
+import groupService from '../api/GroupService';
 import { useAuth } from '../AuthContext';
 
 function MyGroupsPage() {
@@ -9,18 +9,18 @@ function MyGroupsPage() {
     const userId = currentUser?.uid;
 
     useEffect(() => {
-      const fetchUserGroups = async () => {
-        try {
-          const fetchedGroups = await GroupService.getGroupByUserID(userId);
-          setGroups(fetchedGroups);
-        } catch (error) {
-          console.error('Error fetching groups:', error);
-        }
-      };
-    
-      fetchUserGroups();
-    }, []);
-    
+        const fetchUserGroups = async () => {
+            try {
+                const fetchedGroups = await groupService.getGroupByUserID(userId);
+                setGroups(fetchedGroups);
+            } catch (error) {
+                console.error('Error fetching groups:', error);
+            }
+        };
+
+        fetchUserGroups();
+    }, [userId]); // Include userId in the dependency array
+
 
     return (
       <div className="px-6 py-24 sm:py-32 lg:px-8">

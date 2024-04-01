@@ -27,9 +27,9 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+getAnalytics(app);
 const auth = getAuth();
-const database = getDatabase();
+getDatabase();
 const provider = new GoogleAuthProvider();
 
 onAuthStateChanged(auth, (user) => {

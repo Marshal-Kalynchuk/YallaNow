@@ -1,5 +1,6 @@
 import axios from "axios";
 import config from "../config/config";
+import handleResponse from "./ResponseHelper"
 
 class FeedService {
     constructor(baseUrl) {
@@ -20,17 +21,19 @@ class FeedService {
 
     // Fetches recommendations from the backend, handling responses or errors
     async getRecommendations(recommendationRequest) {
-        try {
+
             const response = await axios.post(this.baseUrl, recommendationRequest, {
                 headers: {
                     'Content-Type': 'application/json',
                     'mode': 'cors'
                 },
             });
-            return this.handleResponse(response);
-        } catch (error) {
-            throw new Error('Error communicating with server.');
-        }
+            handleResponse(response);
+            return {
+                recommId: response.data.recommId,
+                recommendations: this.formatRecommendationsToEvents(response.data.recommendations)
+            }
+
     }
 
     // Fetches default event recommendations
@@ -111,25 +114,7 @@ class FeedService {
     }
 
     // Handles API response, throwing errors for bad requests or returning data for valid responses
-    handleResponse(response) {
-        switch (response.status) {
-            case 200:
-                return {
-                    recommId: response.data.recommId,
-                    recommendations: this.formatRecommendationsToEvents(response.data.recommendations)
-                };
-            case 400:
-                throw new Error("Bad request: " + response.data.message);
-            case 403:
-                throw new Error("Access denied.");
-            case 404:
-                throw new Error("Resource not found.");
-            case 422:
-                throw new Error("Unprocessable entity: " + response.data.message);
-            default:
-                throw new Error("Error processing request.");
-        }
-    }
+
 }
 
 const feedService = new FeedService(config.feedBaseUrl);

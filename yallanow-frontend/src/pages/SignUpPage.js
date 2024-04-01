@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { register, googleSignIn } from '../config/firebase-config';
 import { useNavigate  } from 'react-router-dom';
+
 const SignUpPage = () => {
   // Hook for navigation
   const navigate = useNavigate();

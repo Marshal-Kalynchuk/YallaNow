@@ -80,7 +80,7 @@ public class EventsTest {
             // Mock the behavior of addressService.createAddress
             EventDTO event = createValidEventDTO();
             AddressDTO address = new AddressDTO("Street", "City", "Province", "PostalCode", "Country");
-            event.setAddressDTO(address);
+            event.setAddress(address);
 
             AddressEntity mockAddress = new AddressEntity(1, "Street", "City", "Province", "PostalCode", "Country");
             EventsEntity mockEvent = new EventsEntity(1, 1, "Event Title", "Event Description", mockAddress.getAddressId(),
@@ -351,7 +351,7 @@ public class EventsTest {
             // Create EventDTO object using constructor
             EventDTO eventDTO = new EventDTO(eventID, groupID, eventTitle, eventDescription,
                     location, eventStartTime, eventEndTime, status, count, capacity, imageUrl);
-            eventDTO.setAddressDTO(location);
+            eventDTO.setAddress(location);
 
             // Assertions
             Assertions.assertNotNull(eventDTO);
@@ -359,7 +359,7 @@ public class EventsTest {
             Assertions.assertEquals(groupID, eventDTO.getGroupId());
             Assertions.assertEquals(eventTitle, eventDTO.getEventTitle());
             Assertions.assertEquals(eventDescription, eventDTO.getEventDescription());
-            Assertions.assertEquals(location, eventDTO.getAddressDTO());
+            Assertions.assertEquals(location, eventDTO.getAddress());
             Assertions.assertEquals(eventStartTime, eventDTO.getEventStartTime());
             Assertions.assertEquals(eventEndTime, eventDTO.getEventEndTime());
             Assertions.assertEquals(status, eventDTO.getStatus());
@@ -380,7 +380,7 @@ public class EventsTest {
             eventDTO.setEventTitle("Test Event");
             eventDTO.setEventDescription("Description");
             AddressDTO location = new AddressDTO(1, "Street", "City", "Province", "Postal Code", "Country");
-            eventDTO.setAddressDTO(location);
+            eventDTO.setAddress(location);
             LocalDateTime eventStartTime = LocalDateTime.now();
             LocalDateTime eventEndTime = LocalDateTime.now().plusHours(1);
             eventDTO.setEventStartTime(eventStartTime);
@@ -395,7 +395,7 @@ public class EventsTest {
             Assertions.assertEquals(1, eventDTO.getGroupId());
             Assertions.assertEquals("Test Event", eventDTO.getEventTitle());
             Assertions.assertEquals("Description", eventDTO.getEventDescription());
-            Assertions.assertEquals(location, eventDTO.getAddressDTO());
+            Assertions.assertEquals(location, eventDTO.getAddress());
             Assertions.assertEquals(eventStartTime, eventDTO.getEventStartTime());
             Assertions.assertEquals(eventEndTime, eventDTO.getEventEndTime());
             Assertions.assertEquals(EventStatus.Scheduled, eventDTO.getStatus());
@@ -516,7 +516,7 @@ public class EventsTest {
         event.setGroupId(1);
         event.setEventTitle("Event Title");
         event.setEventDescription("Event Description");
-        event.setAddressDTO(address);
+        event.setAddress(address);
         event.setEventStartTime(LocalDateTime.now().plusHours(1));
         event.setEventEndTime(LocalDateTime.now().plusHours(2));
         event.setStatus(EventStatus.Scheduled);
@@ -533,7 +533,7 @@ public class EventsTest {
         event.setGroupId(1);
         event.setEventTitle(null);
         event.setEventDescription(null);
-        event.setAddressDTO(null);
+        event.setAddress(null);
         event.setEventStartTime(LocalDateTime.now());
         event.setEventEndTime(LocalDateTime.now().minusHours(1));
         event.setStatus(EventStatus.Scheduled);

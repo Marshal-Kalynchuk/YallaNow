@@ -12,7 +12,7 @@ const GroupCard = ({ group }) => {
   const handleClick = () => {
     navigate(`/groups/${group.groupID}`);
   };
-  console.log(group);
+
   return (
     <div
       className="max-w-sm rounded overflow-hidden shadow-lg cursor-pointer m-4"

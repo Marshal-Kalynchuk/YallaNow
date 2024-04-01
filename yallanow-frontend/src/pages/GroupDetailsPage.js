@@ -1,10 +1,10 @@
 // GroupDetailsPage.js
-import React, { useEffect, useState } from 'react';
-import { useParams,useNavigate, Link  } from 'react-router-dom';
+import React, {useCallback, useEffect, useState} from 'react';
+import { useParams,useNavigate  } from 'react-router-dom';
 import EventCard from '../components/EventCard';
-import GroupService from '../api/GroupService';
-import EventService from '../api/EventService';
-import GroupMemberService from '../api/GroupMemberService';
+import groupService from '../api/GroupService';
+import eventService from '../api/EventService';
+import groupMemberService from '../api/GroupMemberService';
 import { useAuth } from '../AuthContext';
 
 const GroupDetailsPage = () => {
@@ -14,26 +14,23 @@ const GroupDetailsPage = () => {
     const [events, setEvents] = useState([]);
     const navigate = useNavigate();
     const { currentUser } = useAuth();
+    const userRole = "USER";
 
-    const groupMembers = {
-        userID: currentUser?.uid,
-        userName: currentUser?.displayName, 
-        role: "USER"
-    };
+    const fetchGroupDetails = useCallback(async () => {
+        try {
+            const details = await groupService.getGroup(groupId);
+            setGroupDetails(details);
+            const groupEvents = await eventService.getEventsForGroup(groupId);
+            setEvents(groupEvents);
+        } catch (error) {
+            console.error("Error fetching group details:", error);
+        }
+    }, [groupId]);
 
-    const fetchGroupDetails = async () => {
-            try {
-                const details = await GroupService.getGroup(groupId);
-                setGroupDetails(details);
-                const groupEvents = await EventService.getEventsForGroup(groupId);
-                setEvents(groupEvents);
-            } catch (error) {
-                console.error("Error fetching group details:", error);
-            }
-    };
     useEffect(() => {
         fetchGroupDetails();
-    }, [groupId]);
+    }, [fetchGroupDetails]);
+
 
     if (!groupDetails) {
         return <div>Loading...</div>;
@@ -49,9 +46,13 @@ const GroupDetailsPage = () => {
 
     const handleJoinGroup = async () => {
         try {
-            await GroupMemberService.addGroupMember(groupId, groupMembers);
+            await groupMemberService.addGroupMember(groupId, {
+                userID: currentUser?.uid,
+                userName: currentUser?.displayName,
+                role: userRole
+            });
             alert('Successfully joined the group!');
-            fetchGroupDetails();
+            await fetchGroupDetails();
         } catch (error) {
             console.error('Error joining group:', error);
             alert('Failed to join the group.');

@@ -1,16 +1,13 @@
 import React, { useState } from 'react';
-import { useParams, useLocation, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { PhotoIcon } from '@heroicons/react/24/solid'
-import EventService from '../api/EventService';
-
+import eventService from '../api/EventService';
 
 const CreateEventPage = () => {
-  const location = useLocation();
   const navigate = useNavigate();
   const { groupId } = useParams();
 
   const [formData, setFormData] = useState({
-    eventId: 1,
     eventTitle: '',
     eventDescription: '',
     eventLocationStreet: '',
@@ -23,7 +20,6 @@ const CreateEventPage = () => {
     eventCapacity: 1,
     eventStatus: "Scheduled",
     groupId: groupId,
-    eventImageUrl: "dumb",
     eventAttendeeCount: 1,
   });
 
@@ -56,14 +52,13 @@ const CreateEventPage = () => {
     };
   
     try {
-      const createdEvent = await EventService.createEvent(finalFormData);
+      const createdEvent = await eventService.createEvent(finalFormData);
       console.log('Event created successfully', createdEvent);
-      navigate('/some-confirmation-page-or-back-to-events');
+      navigate(`/groups/${groupId}`);
     } catch (error) {
       console.error('Error creating event:', error);
     }
   };
-  
 
   const triggerFileInput = () => {
     document.getElementById('image-upload').click();

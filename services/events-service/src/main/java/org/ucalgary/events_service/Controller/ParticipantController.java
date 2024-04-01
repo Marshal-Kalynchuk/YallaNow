@@ -35,7 +35,7 @@ public class ParticipantController {
      * @return Response Entity with the object of the participant added
      */
     @PostMapping
-    public ResponseEntity<?> addParticipant(@PathVariable int eventId, @RequestBody ParticipantDTO participant, @RequestAttribute("Id") String userId,
+    public ResponseEntity<?> addParticipantToEvent(@PathVariable int eventId, @RequestBody ParticipantDTO participant, @RequestAttribute("Id") String userId,
                                             @RequestAttribute("Email") String email, @RequestAttribute("Name") String name) {
         try{
             validateParticipant(eventId, participant, userId);
@@ -56,12 +56,11 @@ public class ParticipantController {
 
     /**
      * Get all participants for an event
-     * @param event
+     * @param eventId
      * @return Response Entity with the list of participants for the event
      */
-
     @GetMapping
-    public ResponseEntity<?> getAllParticipantsForEvent(@PathVariable int eventId) {
+    public ResponseEntity<?> getParticipantsForEvent(@PathVariable int eventId) {
         List<Map<String, String>> participants = participantService.getAllParticipantsForEvent(eventId);
         return ResponseEntity.ok(participants);
     }

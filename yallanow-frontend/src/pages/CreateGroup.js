@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import GroupService from '../api/GroupService';
+import groupService from '../api/GroupService';
 import { useAuth } from '../AuthContext';
-
 
 const CreateGroup = () => {
   const [groupName, setGroupName] = useState('');
@@ -27,14 +26,12 @@ const CreateGroup = () => {
     };
 
     try {
-      const newGroup = await GroupService.createGroup(groupData);
-      console.log('Group created successfully', newGroup);
-      navigate(`/group/${newGroup.groupID}`);
+      const newGroup = await groupService.createGroup(groupData);
+      navigate(`/groups/${newGroup.groupID}`);
     } catch (error) {
-      console.error('Error creating group:', error);
+        alert(error.message || 'Failed to create group.');
     }
   };
-
 
   return (
     <div className="max-w-md mx-auto mt-10">
@@ -43,11 +40,12 @@ const CreateGroup = () => {
                 <p className="text-base font-semibold leading-7 text-pink-600">Become a Founder</p>
                 <h2 className="mt-2 text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">Create Your Dream Group</h2>
                 <p className="mt-6 text-lg leading-8 text-gray-600">
-                Build you dream Community of likeminded Individuals
+                Build you dream Community of like-minded Individuals
                 </p>
             </div>
         </div>
       <h2 className="text-2xl font-semibold mb-5">Create a New Group</h2>
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label htmlFor="groupName" className="block text-sm font-medium text-gray-700">Group Name</label>

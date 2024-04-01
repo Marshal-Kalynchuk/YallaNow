@@ -41,7 +41,7 @@ public class AddressTest {
         void testCreateAddress_Success() {
             // Create a valid event DTO
             EventDTO eventDTO = new EventDTO();
-            eventDTO.setAddressDTO(new AddressDTO("Street", "City", "Province", "PostalCode", "Country"));
+            eventDTO.setAddress(new AddressDTO("Street", "City", "Province", "PostalCode", "Country"));
 
             // Mock repository behavior
             when(addressRepository.save(any())).thenReturn(new AddressEntity());
@@ -75,7 +75,7 @@ public class AddressTest {
         void testUpdateAddress_Success() {
             // Create a valid event DTO
             EventDTO eventDTO = new EventDTO();
-            eventDTO.setAddressDTO(new AddressDTO("Updated Street", "Updated City", "Updated Province", "Updated PostalCode", "Updated Country"));
+            eventDTO.setAddress(new AddressDTO("Updated Street", "Updated City", "Updated Province", "Updated PostalCode", "Updated Country"));
 
             // Mock repository behavior
             when(addressRepository.save(any())).thenReturn(new AddressEntity());

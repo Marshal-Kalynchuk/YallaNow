@@ -2,29 +2,22 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import GroupCard from '../components/GroupCard';
-import GroupService from '../api/GroupService';
+import groupService from '../api/GroupService';
 
 const GroupPage = () => {
   const [groups, setGroups] = useState([]);
 
   useEffect(() => {
     const fetchGroups = async () => {
-      try {
-        const fetchedGroups = await GroupService.getGroups();
-        console.log(fetchedGroups); 
+
+        const fetchedGroups = await groupService.getGroups();
 
         setGroups(fetchedGroups);
-        console.log('Works')
-      } catch (error) {
-        console.error('Error fetching groups:', error);
-        console.log('Fail')
-      }
+
     };
   
     fetchGroups();
   }, []);
-  
-  console.log(groups)
 
   return (
     <div>

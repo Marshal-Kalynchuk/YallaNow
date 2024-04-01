@@ -1,72 +1,64 @@
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 import eventService from '../api/EventService';
-import RecombeeInteractions from '../api/RecomebeeInteractions';
+import participantService from '../api/ParticipantService';
+import recombeeInteractions from '../api/RecomebeeInteractions';
 import { useAuth } from '../AuthContext';
 
-
 const EventDetailsPage = () => {
-  const { currentUser } = useAuth();
-  const userId = currentUser?.uid;
-  const { state } = useLocation();
-  const [recommId, setRecommId] = useState(state.recommId);
+    const { currentUser } = useAuth();
+    const userId = currentUser?.uid;
+    const { state } = useLocation();
+    const recommId = state.recommId;
 
-  const [rsvpStatus, setRsvpStatus] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
-  const navigate = useNavigate();
-  const [event, setEvent] = useState(state.event || {});
+    const [rsvpStatus, setRsvpStatus] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+    const navigate = useNavigate();
+    const [event, setEvent] = useState(state.event || {});
 
-  useEffect(() => {
-    if (!event.eventId && state.eventId) {
-      fetchEventDetails(state.eventId);
-    }
-    checkRsvpStatus();
-    if (event.eventId && recommId) {
-      RecombeeInteractions.addDetailViewInteraction(userId.toString(), event.eventId.toString(), recommId.toString());
-    }
-  }, [event.eventId, recommId]);
-
-    const fetchEventDetails = (eventId) => {
-        eventService.getEvent(eventId)
-            .then((fetchedEvent) => {
+    useEffect(() => {
+        const fetchEventDetails = async (eventId) => {
+            try {
+                const fetchedEvent = await eventService.getEvent(eventId);
                 setEvent(fetchedEvent);
-            })
-            .catch((error) => {
+            } catch (error) {
                 setErrorMessage(error.message || 'Failed to fetch event details.');
-            });
-    };
+            }
+        };
 
-    const checkRsvpStatus = () => {
-        if (event.eventId) {
-            eventService.isUserRsvpdToEvent(userId, event.eventId)
-                .then((status) => {
-                    setRsvpStatus(status);
-                })
-                .catch((error) => {
+        const checkRsvpStatus = async () => {
+            if (userId && event.eventId) {
+                try {
+                    const status = await participantService.getEventParticipantStatus(userId, event.eventId);
+                    setRsvpStatus(status === 'Attending');
+                } catch (error) {
                     setErrorMessage(error.message || 'Failed to check RSVP status.');
-                });
+                }
+            }
+        };
+
+        if (!event.eventId && state.eventId) {
+            fetchEventDetails(state.eventId);
+        } else {
+            checkRsvpStatus();
         }
-    };
+
+        if (event.eventId && recommId) {
+            recombeeInteractions.addDetailViewInteraction(userId.toString(), event.eventId.toString(), recommId.toString());
+        }
+    }, [userId, event.eventId, recommId, state.eventId]);
 
     const handleRsvpClick = async () => {
         try {
             if (rsvpStatus) {
-                const success = await eventService.unRsvpUserFromEvent(userId, event.eventId);
-                if (success) {
-                    setRsvpStatus(false);
-                    alert('Successfully un-RSVP\'d');
-                } else {
-                    alert('Failed to un-RSVP. Please try again.');
-                }
+                await participantService.deleteEventParticipant(userId, event.eventId);
+                setRsvpStatus(false);
+                alert('Successfully un-RSVP\'d');
             } else {
-                const success = await eventService.rsvpUserToEvent(userId, event.eventId);
-                if (success) {
-                    setRsvpStatus(true);
-                    alert('Successfully RSVP\'d');
-                    RecombeeInteractions.addPurchaseInteraction(userId.toString(), event.eventId.toString(), recommId.toString());
-                } else {
-                    alert('Failed to RSVP. Please try again.');
-                }
+                await participantService.addEventParticipant(userId, event.eventId);
+                setRsvpStatus(true);
+                alert('Successfully RSVP\'d');
+                recombeeInteractions.addPurchaseInteraction(userId.toString(), event.eventId.toString(), recommId.toString());
             }
         } catch (error) {
             alert('An error occurred while processing your RSVP. Please try again.');
@@ -74,15 +66,14 @@ const EventDetailsPage = () => {
         }
     };
 
-
   const handleVisitGroup = () => {
     navigate(`/groups/${event.groupId}`);
   };
 
   // Send recombee detail view when this page is loaded.
   useEffect(() => {
-      RecombeeInteractions.addDetailViewInteraction(userId, event.eventId, recommId);
-  }, [event, recommId]);
+      recombeeInteractions.addDetailViewInteraction(userId, event.eventId, recommId);
+  }, [userId, event, recommId]);
 
   const formattedStartDate = event.eventStartTime.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
   const formattedStartTime = event.eventStartTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });

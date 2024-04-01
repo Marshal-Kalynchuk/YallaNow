@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes , useLocation} from 'react-router-dom';
+import { Route, Routes , useLocation} from 'react-router-dom';
 import Navbar from './components/Navbar';
 import ExplorePage from './pages/ExplorePage';
 import MyEventsPage from './pages/MyEventsPage';
@@ -22,7 +22,6 @@ import NotFoundPage from './pages//NotFoundPage';
 const App = () => {
   const location = useLocation();
   const hideNavbarRoutes = ['/signup', '/signin', '/forgotpassword', '/'];
-  console.log("Current location:", location.pathname)
   return (
     
       <div className="h-full">
