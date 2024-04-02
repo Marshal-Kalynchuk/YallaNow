@@ -8,7 +8,7 @@ public class EventDTO {
     private int groupId;
     private String eventTitle;
     private String eventDescription;
-    private AddressDTO address;
+    private AddressDTO location;
     private LocalDateTime eventStartTime;
     private LocalDateTime eventEndTime;
     private EventStatus status;
@@ -21,14 +21,14 @@ public class EventDTO {
 
     public EventDTO(int eventId, int groupId,
                     String eventTitle, String eventDescription,
-                    AddressDTO address, LocalDateTime eventStartTime, LocalDateTime eventEndTime,
+                    AddressDTO location, LocalDateTime eventStartTime, LocalDateTime eventEndTime,
                     EventStatus status, int count, int capacity, String imageUrl)throws IllegalArgumentException {
-        checkEvent(eventId, groupId, eventTitle, eventDescription, address, eventStartTime, eventEndTime, status, count, capacity, imageUrl);
+        checkEvent(eventId, groupId, eventTitle, eventDescription, location, eventStartTime, eventEndTime, status, count, capacity, imageUrl);
         this.eventId = eventId;
         this.groupId = groupId;
         this.eventTitle = eventTitle;
         this.eventDescription = eventDescription;
-        this.address = address;
+        this.location = location;
         this.eventStartTime = eventStartTime;
         this.eventEndTime = eventEndTime;
         this.status = status;
@@ -38,15 +38,15 @@ public class EventDTO {
     }
 
     public EventDTO(int groupId, String eventTitle,
-                    String eventDescription, AddressDTO address,
+                    String eventDescription, AddressDTO location,
                     LocalDateTime eventStartTime,
                     LocalDateTime eventEndTime, EventStatus status,
                     int capacity, String imageUrl) throws IllegalArgumentException {
-        checkEvent(groupId, eventTitle, eventDescription, address, eventStartTime, eventEndTime, status, capacity);
+        checkEvent(groupId, eventTitle, eventDescription, location, eventStartTime, eventEndTime, status, capacity);
         this.groupId = groupId;
         this.eventTitle = eventTitle;
         this.eventDescription = eventDescription;
-        this.address = address;
+        this.location = location;
         this.eventStartTime = eventStartTime;
         this.eventEndTime = eventEndTime;
         this.status = status;
@@ -55,15 +55,15 @@ public class EventDTO {
     }
 
     public EventDTO(int groupId, String eventTitle,
-                    String eventDescription, AddressDTO address,
+                    String eventDescription, AddressDTO location,
                     LocalDateTime eventStartTime,
                     LocalDateTime eventEndTime, EventStatus status,
                     int capacity) throws IllegalArgumentException{
-        checkEvent(groupId, eventTitle, eventDescription, address, eventStartTime, eventEndTime, status, capacity);
+        checkEvent(groupId, eventTitle, eventDescription, location, eventStartTime, eventEndTime, status, capacity);
         this.groupId = groupId;
         this.eventTitle = eventTitle;
         this.eventDescription = eventDescription;
-        this.address = address;
+        this.location = location;
         this.eventStartTime = eventStartTime;
         this.eventEndTime = eventEndTime;
         this.status = status;
@@ -75,13 +75,13 @@ public class EventDTO {
     public final int getGroupId() {return groupId;}
     public final String getEventTitle() {return eventTitle;}
     public final String getEventDescription() {return eventDescription;}
-    public final AddressDTO getAddress() { return address; }
+    public final AddressDTO getLocation() { return location; }
     public final LocalDateTime getEventStartTime() {return eventStartTime;}
     public final LocalDateTime getEventEndTime() {return eventEndTime;}
     public final EventStatus getStatus() {return status;}
     public final int getCount() {return count;}
     public final int getCapacity() {return capacity;}
-    public final int getAddressId() {return address.getAddressId();}
+    public final int getAddressId() {return location.getAddressId();}
     public final String getImageUrl() {return imageUrl;}
 
     // Setters
@@ -89,7 +89,7 @@ public class EventDTO {
     public void setGroupId(final int groupId) {this.groupId = groupId;}
     public void setEventTitle(final String eventTitle) {this.eventTitle = eventTitle;}
     public void setEventDescription(final String eventDescription) {this.eventDescription = eventDescription;}
-    public void setAddress(final AddressDTO address) {this.address = address;}
+    public void setLocation(final AddressDTO location) {this.location = location;}
     public void setEventStartTime(final LocalDateTime eventStartTime) {this.eventStartTime = eventStartTime;}
     public void setEventEndTime(final LocalDateTime eventEndTime) {this.eventEndTime = eventEndTime;}
     public void setStatus(final EventStatus status) {this.status = status;}

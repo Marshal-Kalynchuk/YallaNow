@@ -19,7 +19,7 @@ const NotFoundPage = () => {
           <p className="mt-4 text-base text-white/70 sm:mt-6">Sorry, we couldn’t find the page you’re looking for.</p>
           <div className="mt-10 flex justify-center">
             <button
-              onClick={() => navigate('/')}
+              onClick={() => navigate('/explore')}
               className="text-sm font-semibold leading-7 text-white"
             >
               <span aria-hidden="true">&larr;</span> Back to home

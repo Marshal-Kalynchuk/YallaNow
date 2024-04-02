@@ -52,3 +52,17 @@ spec:
                 name: feed
                 port:
                   number: 80
+          - path: /auth
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: auth
+                port:
+                  number: 80
+          - path: /auth/*
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: auth
+                port:
+                  number: 80

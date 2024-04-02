@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -63,7 +64,7 @@ public class ItemConverter {
  * Collect the item details from the PubSub message map.
  */
     public Item getItemFromPubsubMessage(Map<String, Object> map) throws IOException {
-        DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 
         try {
             String eventId = String.valueOf(Optional.ofNullable(map.get("eventId"))
@@ -78,11 +79,8 @@ public class ItemConverter {
             String eventDescription = Optional.ofNullable((String) map.get("eventDescription"))
                     .orElseThrow(() -> new IllegalArgumentException("Missing 'eventDescription' in event data"));
 
-            LocalDateTime startTime = LocalDateTime.parse(Optional.ofNullable((String) map.get("eventStartTime"))
-                    .orElseThrow(() -> new IllegalArgumentException("Missing 'eventStartTime' in event data")), formatter);
-
-            LocalDateTime endTime = LocalDateTime.parse(Optional.ofNullable((String) map.get("eventEndTime"))
-                    .orElseThrow(() -> new IllegalArgumentException("Missing 'eventEndTime' in event data")), formatter);
+            LocalDateTime startTime = parseDateTime(map.get("eventStartTime"), formatter);
+            LocalDateTime endTime = parseDateTime(map.get("eventEndTime"), formatter);
 
             String eventStreet = String.valueOf(Optional.ofNullable(map.get("street"))
                     .orElseThrow(() -> new IllegalArgumentException("Missing 'street' in event data")));
@@ -113,8 +111,7 @@ public class ItemConverter {
                     .orElseThrow(() -> new IllegalArgumentException("Missing 'status' in event data"))
                     .toLowerCase(); // Convert the status to lowercase
 
-            String eventImageUrl = Optional.ofNullable((String) map.get("imageUrl"))
-                    .orElseThrow(() -> new IllegalArgumentException("Missing 'imageUrl' in event data"));
+            String eventImageUrl = (String) map.get("imageUrl");
 
             return new Item(
                     eventId,
@@ -131,6 +128,23 @@ public class ItemConverter {
             );
         } catch (Exception e) {
             throw new IOException("Error constructing item from map: " + e.getMessage(), e);
+        }
+
+    }
+    private LocalDateTime parseDateTime(Object dateTimeObj, DateTimeFormatter formatter) {
+        if (dateTimeObj instanceof String) {
+            return LocalDateTime.parse((String) dateTimeObj, formatter);
+        } else if (dateTimeObj instanceof List) {
+            List<Integer> dateTimeList = (List<Integer>) dateTimeObj;
+            return LocalDateTime.of(
+                    dateTimeList.get(0), // year
+                    dateTimeList.get(1), // month
+                    dateTimeList.get(2), // day
+                    dateTimeList.get(3), // hour
+                    dateTimeList.get(4)  // minute
+            );
+        } else {
+            throw new IllegalArgumentException("Invalid date time format: " + dateTimeObj);
         }
     }
 }

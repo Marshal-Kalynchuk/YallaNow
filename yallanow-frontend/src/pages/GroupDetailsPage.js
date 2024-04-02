@@ -37,7 +37,6 @@ const GroupDetailsPage = () => {
     }
     const handleManageGroup = () => {
         if (isAdmin) {
-            console.log(groupDetails)
             navigate(`/manage-group/${groupId}`,{ state: { groupData: groupDetails } });
         } else {
             alert("You do not have permission to manage this group.");
@@ -69,7 +68,7 @@ const GroupDetailsPage = () => {
 
     const isAdmin = groupDetails.groupMembers.some(member => member.userID === currentUser?.uid && member.role === 'ADMIN');
     const isMember = groupDetails.groupMembers.some(member => member.userID === currentUser?.uid);
-    console.log(isMember,isAdmin,groupDetails.isPrivate)
+
     return (
     <div className="container mx-auto py-10">
         <div className="px-6 py-20 sm:py-10 lg:px-8">

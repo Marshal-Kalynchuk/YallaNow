@@ -6,7 +6,7 @@ metadata:
   labels:
     app: "groups"
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: "groups"
@@ -55,7 +55,7 @@ spec:
     name: "groups"
     apiVersion: "apps/v1"
   minReplicas: 1
-  maxReplicas: 3
+  maxReplicas: 1
   metrics:
   - type: "Resource"
     resource:

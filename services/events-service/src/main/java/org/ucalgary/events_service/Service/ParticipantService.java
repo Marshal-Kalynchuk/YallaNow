@@ -10,11 +10,10 @@ import org.ucalgary.events_service.Entity.EventsEntity;
 import org.ucalgary.events_service.DTO.ParticipantDTO;
 import org.ucalgary.events_service.DTO.EventStatus;
 import org.springframework.stereotype.Service;
+
+import java.util.*;
 import java.util.stream.Collectors;
-import java.util.ArrayList;
-import java.util.Optional;
-import java.util.List;
-import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 /**
@@ -83,12 +82,13 @@ public class ParticipantService {
      * @return A list of event and status data for the participant.
      */
     @Transactional
-    public List<Map<String, Object>> getEventsForParticipant(String userId) throws EntityNotFoundException {
+    public List<Map<String, Object>> getEventsForParticipant(String userId) {
         List<ParticipantEntity> participantEntities = participantRepository.findAllByUserId(userId);
         if (participantEntities.isEmpty()) {
-            logger.error("No events registered for user {}", userId);
-            throw new EntityNotFoundException("No Events Registered");
+            logger.info("No events registered for user {}", userId);
+            return Collections.emptyList();
         }
+
         logger.info("Retrieved events for participant {}", userId);
         return participantEntities.stream().map(participant -> {
             EventsEntity event = participant.getEvent();
@@ -96,6 +96,7 @@ public class ParticipantService {
             return Map.of("event", event, "status", status);
         }).collect(Collectors.toList());
     }
+
 
     /**
      * Retrieves all participants for an event.

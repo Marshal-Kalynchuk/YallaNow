@@ -25,7 +25,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedHeaders("*");
     }
     @Override
-   public void addInterceptors(InterceptorRegistry registry) {
+    public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(myInterceptor).addPathPatterns("/**");
-   }
+    }
 }

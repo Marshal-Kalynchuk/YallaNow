@@ -9,6 +9,7 @@ public class GroupDTO {
     private List<EventDTO> events;
     private boolean isPrivate;
     private Integer memberCount;
+    private UserRole role;
 
     public GroupDTO(int groupID, String groupName, List<GroupMemberDTO> groupMembers, List<EventDTO> events, boolean isPrivate) {
         this.groupID = groupID;
@@ -17,12 +18,12 @@ public class GroupDTO {
         this.events = events;
         this.isPrivate = isPrivate;
         this.memberCount = groupMembers.size();
-
     }
 
     public GroupDTO() {
-
     }
+
+    public UserRole getRole() {return role;}
 
     public int getGroupID() {
         return groupID;
@@ -90,5 +91,9 @@ public class GroupDTO {
     }
     public Integer getMemberCount() {
         return memberCount;
+    }
+
+    public void setUserRole(UserRole role) {
+        this.role = role;
     }
 }

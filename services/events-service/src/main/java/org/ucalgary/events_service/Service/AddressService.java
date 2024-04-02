@@ -32,11 +32,11 @@ public class AddressService {
     public AddressEntity createAddress(EventDTO event) throws IllegalArgumentException {
         checkAddress(event);
         AddressEntity newAddress = new AddressEntity(event.getAddressId(),
-                event.getAddress().getStreet(),
-                event.getAddress().getCity(),
-                event.getAddress().getProvince(),
-                event.getAddress().getPostalCode(),
-                event.getAddress().getCountry());
+                event.getLocation().getStreet(),
+                event.getLocation().getCity(),
+                event.getLocation().getProvince(),
+                event.getLocation().getPostalCode(),
+                event.getLocation().getCountry());
         AddressEntity savedAddress = addressRepository.save(newAddress);
         logger.info("Created new address with ID: {}", savedAddress.getAddressId());
         return savedAddress;
@@ -53,11 +53,11 @@ public class AddressService {
     public AddressEntity updateAddress(EventDTO event) throws IllegalArgumentException {
         checkAddress(event);
         AddressEntity updatedAddress = new AddressEntity(event.getAddressId(),
-                event.getAddress().getStreet(),
-                event.getAddress().getCity(),
-                event.getAddress().getProvince(),
-                event.getAddress().getPostalCode(),
-                event.getAddress().getCountry());
+                event.getLocation().getStreet(),
+                event.getLocation().getCity(),
+                event.getLocation().getProvince(),
+                event.getLocation().getPostalCode(),
+                event.getLocation().getCountry());
         AddressEntity savedAddress = addressRepository.save(updatedAddress);
         logger.info("Updated address with ID: {}", savedAddress.getAddressId());
         return savedAddress;
@@ -87,22 +87,22 @@ public class AddressService {
     private void checkAddress(EventDTO event) throws IllegalArgumentException {
         logger.info("Checking validity of address for event with ID: {}", event.getEventId());
 
-        if(event.getAddress() == null){
+        if(event.getLocation() == null){
             throw new IllegalArgumentException("You have to have an address");
         }
-        if (event.getAddress().getStreet() == null || event.getAddress().getStreet().isEmpty()) {
+        if (event.getLocation().getStreet() == null || event.getLocation().getStreet().isEmpty()) {
             throw new IllegalArgumentException("Street is required");
         }
-        if (event.getAddress().getCity() == null || event.getAddress().getCity().isEmpty()) {
+        if (event.getLocation().getCity() == null || event.getLocation().getCity().isEmpty()) {
             throw new IllegalArgumentException("City is required");
         }
-        if (event.getAddress().getProvince() == null || event.getAddress().getProvince().isEmpty()) {
+        if (event.getLocation().getProvince() == null || event.getLocation().getProvince().isEmpty()) {
             throw new IllegalArgumentException("Province is required");
         }
-        if (event.getAddress().getPostalCode() == null || event.getAddress().getPostalCode().isEmpty()) {
+        if (event.getLocation().getPostalCode() == null || event.getLocation().getPostalCode().isEmpty()) {
             throw new IllegalArgumentException("Postal code is required");
         }
-        if (event.getAddress().getCountry() == null || event.getAddress().getCountry().isEmpty()) {
+        if (event.getLocation().getCountry() == null || event.getLocation().getCountry().isEmpty()) {
             throw new IllegalArgumentException("Country is required");
         }
         logger.info("Address is valid for event with ID: {}", event.getEventId());

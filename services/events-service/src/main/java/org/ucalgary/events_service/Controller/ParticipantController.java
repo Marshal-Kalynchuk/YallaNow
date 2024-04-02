@@ -44,7 +44,7 @@ public class ParticipantController {
             ParticipantEntity participants = participantService.addParticipantToEvent(participant, email, name, event);
             return ResponseEntity.status(HttpStatus.CREATED).body(participants);
         }catch(IllegalArgumentException e){
-            return (ResponseEntity<?>) ResponseEntity.status(422);
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
         }catch(EntityNotFoundException e){
             return ResponseEntity.notFound().build();
         } catch (IllegalStateException e) {

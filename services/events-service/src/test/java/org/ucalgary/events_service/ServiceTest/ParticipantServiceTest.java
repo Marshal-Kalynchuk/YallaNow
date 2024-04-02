@@ -268,7 +268,7 @@ public class ParticipantServiceTest {
 
             // Assertions
             Assertions.assertNotNull(participantDTO);
-            Assertions.assertEquals(participantID, participantDTO.getParticipantID());
+            Assertions.assertEquals(participantID, participantDTO.getParticipantId());
             Assertions.assertEquals(userid, participantDTO.getUserId());
             Assertions.assertEquals(eventid, participantDTO.getEventId());
             Assertions.assertEquals(status, participantDTO.getParticipantStatus());
@@ -281,13 +281,13 @@ public class ParticipantServiceTest {
             ParticipantDTO participantDTO = new ParticipantDTO();
 
             // Set values using setters
-            participantDTO.setParticipantID(1);
+            participantDTO.setParticipantId(1);
             participantDTO.setUserId("testUser");
             participantDTO.setEventId(1);
             participantDTO.setParticipantStatus(ParticipantStatus.Attending);
 
             // Assertions using getters
-            Assertions.assertEquals(1, participantDTO.getParticipantID());
+            Assertions.assertEquals(1, participantDTO.getParticipantId());
             Assertions.assertEquals("testUser", participantDTO.getUserId());
             Assertions.assertEquals(1, participantDTO.getEventId());
             Assertions.assertEquals(ParticipantStatus.Attending, participantDTO.getParticipantStatus());

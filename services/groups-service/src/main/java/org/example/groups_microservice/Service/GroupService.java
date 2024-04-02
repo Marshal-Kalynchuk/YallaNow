@@ -34,8 +34,6 @@ public class GroupService {
     private final GroupMemberService groupMemberService;
     private static final Logger logger = LoggerFactory.getLogger(GroupService.class);
 
-
-
     public GroupService(GroupRepository groupRepository, EventService eventService, GroupMemberService groupMemberService) {
         this.groupRepository = groupRepository;
         this.eventService = eventService;

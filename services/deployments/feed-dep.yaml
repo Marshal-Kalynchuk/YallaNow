@@ -6,7 +6,7 @@ metadata:
   labels:
     app: "feed"
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: "feed"
@@ -60,7 +60,7 @@ spec:
     name: "feed"
     apiVersion: "apps/v1"
   minReplicas: 1
-  maxReplicas: 3
+  maxReplicas: 1
   metrics:
   - type: "Resource"
     resource:

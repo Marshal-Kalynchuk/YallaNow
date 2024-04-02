@@ -30,7 +30,6 @@ class EventService {
     // Fetches events for a specific group and formats each received event.
     async getEventsForGroup(groupId) {
         const rawEvents = await EventServiceApi.getEventsForGroup(groupId);
-        console.log(rawEvents); // Check what rawEvents contains
 
         return await Promise.all(rawEvents.map(async (event) => {
             return this.formatEventFromEventService(event);
@@ -66,6 +65,7 @@ class EventService {
             count: 1,
 
             imageUrl: data.imageUrl,
+
         };
     }
 

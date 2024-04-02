@@ -138,25 +138,23 @@ public class GroupsController {
      */
     @GetMapping("/user/{userID}")
     public ResponseEntity<List<GroupDTO>> getGroupsByUserID(@PathVariable String userID) {
-        // check if the user is authorized to get the groups
         List<GroupEntity> groups = groupService.getGroupsByUserID(userID);
         List<GroupDTO> groupDTOS = groups.stream()
-                .map(this::convertToDtoWithNoMembersOrEvents)
+                .map(group -> {
+                    GroupDTO groupDTO = convertToDtoWithNoMembersOrEvents(group);
+                    groupDTO.setMemberCount(group.getGroupMembers().size());
+                    // Set the user's role in this group, assuming each user has only one role per group
+                    group.getGroupMembers().stream()
+                            .filter(member -> userID.equals(member.getUserID()))
+                            .findFirst()
+                            .ifPresent(member -> groupDTO.setUserRole(member.getRole()));
+                    return groupDTO;
+                })
                 .collect(Collectors.toList());
-        //get member count and role
-        for (GroupDTO groupDTO : groupDTOS) {
-            for (GroupEntity groupEntity : groups) {
-                for (GroupMemberEntity groupMemberEntity : groupEntity.getGroupMembers()) {
-                    if (groupMemberEntity.getUserID().equals(userID)) {
-                        groupDTO.setMemberCount(groupEntity.getGroupMembers().size());
-                    }
-                }
-            }
-        }
 
         return ResponseEntity.ok(groupDTOS);
-
     }
+
     /**
      * convertToDtoWithNoMembersOrEvents method is used to convert a group entity to a group DTO without members or events.
      * @param groupEntity - the group entity

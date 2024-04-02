@@ -191,7 +191,7 @@ public class EventService {
         if(event.getCapacity() < 0) { // Check if the event capacity is negative
             throw new IllegalArgumentException("Capacity can't be negative");
         }
-        if(event.getAddress() == null){
+        if(event.getLocation() == null){
             throw new IllegalArgumentException("Missing Address");
         }
         

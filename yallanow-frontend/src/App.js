@@ -49,6 +49,7 @@ const App = () => {
           <Route path="/mygroups" element={<ProtectedRoute><MyGroupsPage/></ProtectedRoute>}/>
           {/* Catch-all route for 404 Page Not Found */}
           <Route path="*" element={<NotFoundPage />} />
+          <Route path="/not-found" element={<NotFoundPage />} />
         </Routes>
       </div>
     
