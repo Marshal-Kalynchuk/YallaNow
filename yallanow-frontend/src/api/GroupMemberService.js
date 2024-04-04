@@ -47,6 +47,7 @@ class GroupMemberService {
 
             console.log("before syc")
             const idToken = await this.fetchIdToken();
+            console.log(groupID)
             const response = await axios.delete(`${this.baseUrl}/${groupID}/members/${userID}`, {
                 headers: { 
                     "Authorization": idToken

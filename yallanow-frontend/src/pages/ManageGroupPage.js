@@ -8,27 +8,25 @@ function ManageGroupPage() {
   const location = useLocation();
   const groupData = location.state.groupData || {};
   const [groupMembers, setGroupMembers] = useState(groupData.groupMembers || []);
-
   useEffect(() => {
     const fetchGroupMembers = async () => {
       try {
-        const members = await groupMemberService.getGroupMembers(groupData.groupId);
+        const members = await groupMemberService.getGroupMembers(groupData.groupID);
         setGroupMembers(members);
-        console.log(groupMembers);
       } catch (error) {
         console.error('Error fetching group members:', error);
       }
     };
 
-    if (groupData.groupId) {
+    if (groupData.groupID) {
       fetchGroupMembers();
     }
-  }, [groupData.groupId, groupMembers]);
+  }, [groupData.groupID]);
 
   const handleRoleUpdate = async (userId, newRole) => {
     try {
-      await groupMemberService.updateGroupMember(groupData.groupId, userId, { role: newRole });
-      const updatedMembers = await groupMemberService.getGroupMembers(groupData.groupId);
+      await groupMemberService.updateGroupMember(groupData.groupID, userId, { role: newRole });
+      const updatedMembers = await groupMemberService.getGroupMembers(groupData.groupID);
       setGroupMembers(updatedMembers);
     } catch (error) {
       console.error('Error updating user role:', error);
@@ -37,13 +35,16 @@ function ManageGroupPage() {
 
   const handleRemoveUser = async (userId) => {
     try {
-      await groupMemberService.removeGroupMember(groupData.groupId, userId);
-      const updatedMembers = await groupMemberService.getGroupMembers(groupData.groupId);
-      setGroupMembers(updatedMembers);
+      await groupMemberService.removeGroupMember(groupData.groupID, userId);
+      // Update local state instead of fetching all members again
+      setGroupMembers(currentMembers => 
+        currentMembers.filter(member => member.userID !== userId)
+      );
     } catch (error) {
       console.error('Error removing user from group:', error);
     }
   };
+  
 
   return (
     <div className="mt-20 px-4 sm:px-6 lg:px-8">
