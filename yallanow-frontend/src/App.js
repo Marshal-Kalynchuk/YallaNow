@@ -34,7 +34,7 @@ const App = () => {
           <Route path="/signin" element={<SignInPage />} />
           <Route path="/forgotpassword" element={<ForgotPassword />} />
           
-          {/* Protected routes */}
+
           <Route path="/" element={<LandingPage />} />
           <Route path="/explore" element={<ProtectedRoute><ExplorePage /></ProtectedRoute>} />
           <Route path="/myevents" element={<ProtectedRoute><MyEventsPage /></ProtectedRoute>} />
@@ -47,7 +47,7 @@ const App = () => {
           <Route path="/manage-group/:groupId" element={<ProtectedRoute><ManageGroupPage/></ProtectedRoute>}/>
           <Route path="/profile" element={<ProtectedRoute><ProfilePage/></ProtectedRoute>}/>
           <Route path="/mygroups" element={<ProtectedRoute><MyGroupsPage/></ProtectedRoute>}/>
-          {/* Catch-all route for 404 Page Not Found */}
+
           <Route path="*" element={<NotFoundPage />} />
           <Route path="/not-found" element={<NotFoundPage />} />
         </Routes>
