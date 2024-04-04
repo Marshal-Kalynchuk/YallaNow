@@ -18,6 +18,7 @@ spec:
       containers:
       - name: "auth-sha256-1"
         image: "us-central1-docker.pkg.dev/yallanow-413400/yallanow-services/auth-service:latest"
+        imagePullPolicy: Always
         env:
           - name: GOOGLE_APPLICATION_CREDENTIALS
             value: /var/secrets/google/firebase-credentials.json

@@ -18,6 +18,7 @@ spec:
       containers:
       - name: "analytics-sha256-1"
         image: "us-central1-docker.pkg.dev/yallanow-413400/yallanow-services/analytics-service:latest"
+        imagePullPolicy: Always
         env:
           - name: RECOMBEE_DATABASE_ID
             valueFrom:
