@@ -7,6 +7,8 @@ const handleResponse = (response) => {
             return response.data;
         case 201:
             return response.data;
+        case 204:
+            return true;
         case 400:
             throw new Error(response.data?.message || "Bad request.");
         case 401:
