@@ -17,10 +17,10 @@ const CreateEventPage = () => {
     eventLocationPostalCode: '',
     eventStartTime: '',
     eventEndTime: '',
-    eventCapacity: 1,
+    eventCapacity: 0,
     eventStatus: "Scheduled",
     groupId: groupId,
-    eventAttendeeCount: 1,
+    eventAttendeeCount: 0,
   });
 
   const [imageBase64, setImageBase64] = useState('');

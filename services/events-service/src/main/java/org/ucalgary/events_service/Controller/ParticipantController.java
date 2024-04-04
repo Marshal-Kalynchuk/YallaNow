@@ -1,4 +1,6 @@
 package org.ucalgary.events_service.Controller;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.ucalgary.events_service.DTO.ParticipantDTO;
@@ -20,6 +22,7 @@ import java.util.Optional;
 @CrossOrigin
 @RequestMapping("/events/{eventId}/participants")
 public class ParticipantController {
+    private static final Logger logger = LoggerFactory.getLogger(ParticipantService.class);
 
     private final ParticipantService participantService;
     private final EventService eventService;
@@ -36,23 +39,31 @@ public class ParticipantController {
      */
     @PostMapping
     public ResponseEntity<?> addParticipantToEvent(@PathVariable int eventId, @RequestBody ParticipantDTO participant, @RequestAttribute("Id") String userId,
-                                            @RequestAttribute("Email") String email, @RequestAttribute("Name") String name) {
-        try{
+                                                   @RequestAttribute("Email") String email, @RequestAttribute("Name") String name) {
+        logger.info("Adding participant to event: {}", eventId);
+        try {
             validateParticipant(eventId, participant, userId);
             participant.setUserId(userId);
             EventsEntity event = eventService.getEvent(eventId);
             ParticipantEntity participants = participantService.addParticipantToEvent(participant, email, name, event);
+            logger.info("Participant added successfully to event: {}", eventId);
             return ResponseEntity.status(HttpStatus.CREATED).body(participants);
-        }catch(IllegalArgumentException e){
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
-        }catch(EntityNotFoundException e){
+        } catch (IllegalArgumentException e) {
+            logger.error("Error adding participant to event: {} - {}", eventId, e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(e.getMessage());
+        } catch (EntityNotFoundException e) {
+            logger.error("Event not found: {}", eventId);
             return ResponseEntity.notFound().build();
         } catch (IllegalStateException e) {
+            logger.error("Error adding participant to event: {} - {}", eventId, e.getMessage());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
-        } catch(Exception e){
+        } catch (Exception e) {
+            logger.error("Unexpected error adding participant to event: {} - {}", eventId, e.getMessage());
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+
 
     /**
      * Get all participants for an event

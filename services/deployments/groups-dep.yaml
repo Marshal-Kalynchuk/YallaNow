@@ -18,6 +18,7 @@ spec:
       containers:
       - name: "groups-sha256-1"
         image: "us-central1-docker.pkg.dev/yallanow-413400/yallanow-services/groups-service:latest"
+        imagePullPolicy: Always
         env:
           - name: SPRING_DATASOURCE_USERNAME
             valueFrom:

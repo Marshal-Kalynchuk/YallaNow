@@ -170,12 +170,16 @@ public class ParticipantService {
      * @throws IllegalStateException if the event has reached its capacity.
      */
     private void updateEventCount(EventsEntity event, ParticipantStatus newStatus, String email, String name) throws IllegalArgumentException {
+        logger.info("Updating event count for event: {}", event.getEventId());
         if (newStatus != ParticipantStatus.NotAttending) {
             event.setCount(event.getCount() + 1);
             if (event.getCapacity() != null && event.getCount() > event.getCapacity()) {
+                logger.error("Event has reached its capacity. Event Capacity: {}. Event Count: {}. Cannot add more participants.",
+                        event.getCapacity(), event.getCount());
                 throw new IllegalStateException("Event has reached its capacity. Cannot add more participants.");
             }
             if (event.getStatus() == EventStatus.Cancelled) {
+                logger.error("Event is cancelled. Cannot add participant.");
                 throw new IllegalStateException("Event is cancelled. Cannot add participant.");
             }
             eventRepository.save(event);
@@ -184,7 +188,10 @@ public class ParticipantService {
                 eventsPubService.publishEvents(event, "UPDATE");
             }
         }
+        logger.info("Event count updated successfully for event: {}", event.getEventId());
+
     }
+
 
     private void updateEventCount(EventsEntity event, ParticipantStatus oldStatus, ParticipantStatus newStatus, String email, String name) throws IllegalArgumentException {
         if (newStatus != oldStatus) {

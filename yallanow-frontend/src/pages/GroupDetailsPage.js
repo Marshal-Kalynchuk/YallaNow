@@ -61,8 +61,12 @@ const GroupDetailsPage = () => {
     const handleCreateEvent = () => {
         if (!currentUser) {
             navigate('/login'); 
-        } else {
+        } 
+        else if (isAdmin && isMember) {
             navigate(`/groups/${groupId}/create-event`);
+        }
+        else {
+            alert('You need to be a admin of the group to create an event.');
         }
     };
 

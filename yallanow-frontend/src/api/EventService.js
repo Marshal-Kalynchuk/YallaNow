@@ -61,8 +61,8 @@ class EventService {
             eventStartTime: data.eventStartTime,
             eventEndTime: data.eventEndTime,
             status: data.eventStatus,
-            capacity: 1,
-            count: 1,
+            capacity: data.eventCapacity,
+            count: data.eventCounts,
 
             imageUrl: data.imageUrl,
 

@@ -90,7 +90,7 @@ const EventDetailsPage = () => {
                 setRsvpStatus(false);
                 alert('Successfully un-RSVP\'d');
             } else {
-                await participantService.addEventParticipant(userId, event.eventId);
+                await participantService.addEventParticipant(userId, event.eventId, "Attending");
                 setRsvpStatus(true);
                 alert('Successfully RSVP\'d');
 
