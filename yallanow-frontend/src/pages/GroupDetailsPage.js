@@ -91,6 +91,7 @@ const GroupDetailsPage = () => {
                     >
                         Manage Group
                     </button>
+
                 )}
                 {isMember && (
                     <button
@@ -108,7 +109,7 @@ const GroupDetailsPage = () => {
                     Join Group
                 </button>
                 )}
-                {isMember && (
+                {isAdmin && (
                 <button
                         className="mt-4 mr-2 px-4 py-2 bg-pink-600 text-white rounded hover:bg-pink-700 transition-colors"
                         onClick={handleCreateEvent}
