@@ -38,8 +38,8 @@ class EventService {
 
     // Fetches events a user has RSVP'd to and formats each received event.
     async getEventsForParticipant(userId) {
-        const rawEvents = await EventServiceApi.getEventsForParticipant(userId);
-        return rawEvents.map(async (event) => this.formatEventFromEventService(event));
+        const response = await EventServiceApi.getEventsForParticipant(userId);
+        return await response.map((res) => this.formatEventFromEventService(res.event));
     }
 
     // Formats event data before sending it to the event service.

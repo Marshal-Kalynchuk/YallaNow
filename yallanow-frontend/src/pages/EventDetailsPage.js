@@ -80,7 +80,7 @@ const EventDetailsPage = () => {
                 formattedLocation
             }));
         }
-    }, [event.eventId]);
+    }, [event]);
 
 
     const handleRsvpClick = async () => {
